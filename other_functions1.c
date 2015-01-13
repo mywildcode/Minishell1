@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:31:01 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/12 20:52:43 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/13 18:05:37 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		ft_len(t_env *e)
 
 int		ft_setenv_modify(t_env *e, char **str)
 {
-	char	*found;
+	int		found;
 	char	***split;
 	int		i;
 
@@ -78,9 +78,9 @@ int		ft_setenv_modify(t_env *e, char **str)
 	if (str[1] != NULL)
 	{
 		while (split[i] != NULL &&
-				(found = ft_strstr(split[i][0], str[1])) == NULL)
+				(found = ft_strcmp(split[i][0], str[1])) != 0)
 			i++;
-		if (found != NULL)
+		if (found == 0)
 		{
 			e->envcpy[i] = ft_strjoin(ft_strjoin(str[1], "="), str[2]);
 			return (1);
