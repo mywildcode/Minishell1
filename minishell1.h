@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 17:55:03 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/13 19:12:30 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/14 11:44:44 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# define NOSUCHFILE "minishell: no such file or directory: "
+# define NOTFOUND "minishell: command not found: "
+# define PERMISSION "minishell: permission denied: "
+# define ARGUMENTS ".: not enough arguments"
+# define CDERROR "minishell: file couldn't be find or access not granted: "
 
 typedef struct	s_env
 {
@@ -29,7 +34,7 @@ char			***ft_split_env(t_env *e, char c);
 char			*get_next_line(const int fd);
 char			*ft_getenv(char **env, char *elem);
 char			**ft_getpaths(char *elem);
-char			*verify_access(char **str, char **env);
+char			*verify_access(char **str, t_env *e);
 void			execute_program(char *ok, char **str, char **env);
 void			ft_executebin(char **str, char **env);
 void			ft_cd(char **str, t_env *e);

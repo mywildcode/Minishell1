@@ -6,13 +6,13 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:35:02 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/13 19:13:04 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/14 11:25:34 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell1.h"
 
-char	*verify_access(char **str, char **env)
+char	*verify_access(char **str, t_env *e)
 {
 	char	*perms;
 	char	*cool;
@@ -21,7 +21,7 @@ char	*verify_access(char **str, char **env)
 
 	i = 0;
 	perms = ft_strnew(1);
-	paths = ft_getpaths(ft_getenv(env, "PATH"));
+	paths = ft_getpaths(ft_getenv(e->envcpy, "PATH"));
 	while (paths[i] != NULL)
 	{
 		perms = ft_strjoin(ft_strjoin(perms, paths[i]), "/");
@@ -81,15 +81,12 @@ void	control(char **str, char **env, char *line, t_env *e)
 {
 	char	*ok;
 
-	if ((ok = verify_access(str, env)) != NULL && (is_builtin(str)) != 1)
+	if ((ok = verify_access(str, e)) != NULL && (is_builtin(str)) != 1)
 		execute_program(ok, str, env);
 	else if (is_builtin(str) == 1)
 		which_builtin(str, e);
 	else if (str[0][0] == '.' && str[0][1] == '/')
 		ft_executebin(str, env);
 	else
-	{
-		ft_putstr("minishell: command not found: ");
-		ft_putendl(line);
-	}
+		ft_putstr_fd(NOTFOUND, 2), ft_putendl_fd(line, 2);
 }

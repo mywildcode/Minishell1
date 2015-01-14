@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:30:06 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/13 20:33:12 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/14 13:50:10 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_cd(char **str, t_env *e)
 	if (str[1] == NULL)
 		home = ft_getenv(e->envcpy, "HOME"), chdir(home);
 	else if (access(str[1], R_OK) == -1 || chdir(str[1]) != 0)
-		ft_putendl("minishell: File doesn't exist or access not granted.");
+		ft_putstr_fd(CDERROR, 2), ft_putendl_fd(str[1], 2);
 }
 
 void	ft_exit(void)
@@ -33,7 +33,7 @@ void	ft_env(t_env *e)
 
 	i = 0;
 	while (e->envcpy[i] != NULL)
-		ft_putstr(e->envcpy[i]), ft_putchar('\n'), i++;
+		ft_putendl(e->envcpy[i]), i++;
 }
 
 void	ft_setenv(t_env **e, char **str)
@@ -73,7 +73,6 @@ void	ft_unsetenv(t_env *e, char **str)
 			i++;
 		if (ret == 0)
 		{
-			e->envcpy[i] = NULL, free(e->envcpy[i]);
 			while (i < (ft_len(e) - 1))
 				e->envcpy[i] = e->envcpy[i + 1], i++;
 			e->envcpy[i] = NULL;
