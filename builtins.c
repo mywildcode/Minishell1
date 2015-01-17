@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:30:06 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/14 13:50:10 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/17 17:10:46 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,20 @@
 void	ft_cd(char **str, t_env *e)
 {
 	char	*home;
+	char	*pwd;
+	char	buf[PATH_MAX + 1];
+	char	*tmp;
 
+	pwd = getcwd(buf, PATH_MAX + 1);
+	tmp = ft_strjoin(ft_strjoin("OLDPWD", "="), pwd);
+	e->envcpy[18] = ft_strdup(tmp);
 	if (str[1] == NULL)
 		home = ft_getenv(e->envcpy, "HOME"), chdir(home);
 	else if (access(str[1], R_OK) == -1 || chdir(str[1]) != 0)
 		ft_putstr_fd(CDERROR, 2), ft_putendl_fd(str[1], 2);
+	pwd = getcwd(buf, PATH_MAX + 1);
+	tmp = ft_strjoin(ft_strjoin("PWD", "="), pwd);
+	e->envcpy[12] = ft_strdup(tmp);
 }
 
 void	ft_exit(void)
@@ -30,9 +39,11 @@ void	ft_exit(void)
 void	ft_env(t_env *e)
 {
 	int		i;
+	char	***split;
 
 	i = 0;
-	while (e->envcpy[i] != NULL)
+	split = ft_split_env(e, '=');
+	while (e->envcpy[i] != NULL && split[0][1] != NULL)
 		ft_putendl(e->envcpy[i]), i++;
 }
 
@@ -46,15 +57,20 @@ void	ft_setenv(t_env **e, char **str)
 	j = 0;
 	a = 0;
 	new_env = (char **)malloc(sizeof(new_env) * ft_len(*e));
-	while ((*e)->envcpy[j] != NULL)
-		new_env[a] = (*e)->envcpy[j], a++, j++;
-	tmp = ft_new_var(str);
-	new_env[a] = ft_strdup(tmp);
-	new_env[++a] = NULL;
-	a = 0;
-	while (new_env[a])
-		(*e)->envcpy[a] = ft_strdup(new_env[a]), a++;
-	free(tmp), free(new_env), (*e)->envcpy[a] = NULL;
+	if (ft_strchr(str[1], '=') == NULL)
+	{
+		while ((*e)->envcpy[j] != NULL)
+			new_env[a] = (*e)->envcpy[j], a++, j++;
+		tmp = ft_new_var(str);
+		new_env[a] = ft_strdup(tmp);
+		new_env[++a] = NULL;
+		a = 0;
+		while (new_env[a])
+			(*e)->envcpy[a] = ft_strdup(new_env[a]), a++;
+		free(tmp), free(new_env), (*e)->envcpy[a] = NULL;
+	}
+	else
+		ft_putendl_fd("setenv: Syntax Error.", 2);
 }
 
 void	ft_unsetenv(t_env *e, char **str)
@@ -65,11 +81,12 @@ void	ft_unsetenv(t_env *e, char **str)
 	char	***split;
 
 	j = 1;
-	split = ft_split_env(e, '=');
-	while (str[j] != NULL)
+	i = 0;
+	while (str[j] != NULL && ft_strcmp(str[1], "PATH") != 0)
 	{
-		i = 0;
-		while (split[i] != NULL && (ret = ft_strcmp(split[i][0], str[1])) != 0)
+		ft_putstr("oui\n");
+		split = ft_split_env(e, '=');
+		while (split[i] != NULL && (ret = ft_strcmp(split[i][0], str[j])) != 0)
 			i++;
 		if (ret == 0)
 		{
@@ -77,6 +94,6 @@ void	ft_unsetenv(t_env *e, char **str)
 				e->envcpy[i] = e->envcpy[i + 1], i++;
 			e->envcpy[i] = NULL;
 		}
-		j++;
+		i = 0, j++;
 	}
 }

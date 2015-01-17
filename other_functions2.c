@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:35:02 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/14 11:25:34 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/17 15:21:38 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	which_builtin(char **str, t_env *e)
 		ft_cd(str, e);
 	else if (ft_strcmp(str[0], "env") == 0)
 		ft_env(e);
-	else if (str[1] != NULL && ft_strcmp(str[0], "setenv") == 0 &&
+	else if (ft_strcmp(str[0], "setenv") == 0 &&
 			ft_setenv_modify(e, str) != 1)
 		ft_setenv(&e, str);
 	else if (str[1] != NULL && ft_strcmp(str[0], "unsetenv") == 0)

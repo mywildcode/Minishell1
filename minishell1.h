@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 17:55:03 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/14 11:44:44 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/16 16:48:49 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,37 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# define PATH_MAX 200
 # define NOSUCHFILE "minishell: no such file or directory: "
 # define NOTFOUND "minishell: command not found: "
 # define PERMISSION "minishell: permission denied: "
 # define ARGUMENTS ".: not enough arguments"
 # define CDERROR "minishell: file couldn't be find or access not granted: "
+# define BUFF_SIZE 4096
 
 typedef struct	s_env
 {
 	char		**envcpy;
 }				t_env;
 
+typedef struct		s_list
+{
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
+}					t_list;
+
+typedef struct		s_read
+{
+	int				size;
+	int				index;
+	char			*read;
+	int				fd;
+	struct s_read	*next;
+}					t_read;
+
 char			***ft_split_env(t_env *e, char c);
-char			*get_next_line(const int fd);
+int				get_next_line(const int fd, char **line);
 char			*ft_getenv(char **env, char *elem);
 char			**ft_getpaths(char *elem);
 char			*verify_access(char **str, t_env *e);
