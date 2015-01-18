@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:30:06 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/17 17:10:46 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/18 11:47:04 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,24 @@ void	ft_exit(void)
 void	ft_env(t_env *e)
 {
 	int		i;
+	int		j;
+	int		k;
+	int		ret;
 	char	***split;
 
 	i = 0;
+	j = 0;
+	k = 0;
+	ret = 0;
 	split = ft_split_env(e, '=');
-	while (e->envcpy[i] != NULL && split[0][1] != NULL)
-		ft_putendl(e->envcpy[i]), i++;
+	while (split[j] != NULL && (ret = ft_strcmp(split[j][k], "PATH")) != 0)
+		j++;
+	k++;
+	if (split[j][k] == NULL)
+		ft_putstr_fd(NOTFOUND, 2), ft_putendl_fd("env", 2);
+	else
+		while (e->envcpy[i] != NULL && split[j][k] != NULL)
+			ft_putendl(e->envcpy[i]), i++;
 }
 
 void	ft_setenv(t_env **e, char **str)
@@ -84,7 +96,6 @@ void	ft_unsetenv(t_env *e, char **str)
 	i = 0;
 	while (str[j] != NULL && ft_strcmp(str[1], "PATH") != 0)
 	{
-		ft_putstr("oui\n");
 		split = ft_split_env(e, '=');
 		while (split[i] != NULL && (ret = ft_strcmp(split[i][0], str[j])) != 0)
 			i++;
