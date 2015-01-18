@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:35:02 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/18 11:33:45 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/18 20:24:46 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ void	control(char **str, char **env, char *line, t_env *e)
 		which_builtin(str, e);
 	else if (str[0][0] == '.' && str[0][1] == '/')
 		ft_executebin(str, env);
+	else if (str[0][0] == '/' && str[0][1] != '\0')
+		execute_program(str[0], str, env);
 	else
 		ft_putstr_fd(NOTFOUND, 2), ft_putendl_fd(line, 2);
 }
