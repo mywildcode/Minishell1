@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/11 17:35:02 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/19 18:38:00 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/21 19:14:34 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,8 @@ void	which_builtin(char **str, t_env *e)
 	else if (ft_strcmp(str[0], "env") == 0)
 		ft_env(e);
 	else if (ft_strcmp(str[0], "setenv") == 0 &&
-			ft_setenv_modify(e, str) != 1)
-	{
-		if (str[3] != NULL)
-			ft_putendl_fd(TOOMANYARGS, 2);
-		else
-			ft_setenv(&e, str);
-	}
+			str[3] == NULL && ft_setenv_modify(e, str) != 1)
+		ft_setenv(&e, str);
 	else if (ft_strcmp(str[0], "unsetenv") == 0)
 	{
 		if (str[1] == NULL)
@@ -85,6 +80,8 @@ void	which_builtin(char **str, t_env *e)
 	}
 	else if (ft_strcmp(str[0], "exit") == 0)
 		ft_exit();
+	else if (str[0] != NULL && str[1] != NULL && str[2] != NULL)
+		ft_putendl_fd(TOOMANYARGS, 2);
 }
 
 void	control(char **str, char **env, char *line, t_env *e)

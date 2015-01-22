@@ -6,7 +6,7 @@
 /*   By: ql-eilde <ql-eilde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:16:41 by ql-eilde          #+#    #+#             */
-/*   Updated: 2015/01/19 18:38:46 by ql-eilde         ###   ########.fr       */
+/*   Updated: 2015/01/21 19:03:20 by ql-eilde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,17 @@ int		main(int argc, char **argv, char **env)
 	(void)argv;
 	e = (t_env *)malloc(sizeof(t_env));
 	e->envcpy = env;
-	while (42)
+	if (argc == 1 && argv[0] != NULL)
 	{
-		line = NULL;
-		while ((line == NULL) || (line[0] == '\0'))
-			ft_prompt(&line);
-		line = ft_tabtospace(line);
-		if (ft_isspace(line) == 0)
-			str = ft_strsplit(line, ' '), control(str, e->envcpy, line, e);
+		while (42)
+		{
+			line = NULL;
+			while ((line == NULL) || (line[0] == '\0'))
+				ft_prompt(&line);
+			line = ft_tabtospace(line);
+			if (ft_isspace(line) == 0)
+				str = ft_strsplit(line, ' '), control(str, e->envcpy, line, e);
+		}
 	}
 	return (0);
 }
